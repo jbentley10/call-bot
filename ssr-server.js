@@ -15,20 +15,23 @@ app.prepare()
     
   server.listen(3000, (err) => {
     if (err) throw err
+    const callPhone = () => {
+      // Call a phone using Twilio
+      const accountSid = 'ACd80aa495ae4744b3ad39429a1ea29a80';
+      const authToken = 'ddf6504dcef3a2d1d4d752222f627c63';
+      const client = require('twilio')(accountSid, authToken);
+    
+      client.calls
+        .create({
+          twiml: '<Response><Say>Hey, please stop killing black folks.</Say></Response>',
+          to: '+17605324516',
+          from: '+12055512723'
+        })
+        .then(call => console.log(call.sid));
+    }
+    
+    module.exports.callPhone = callPhone;
     console.log('> Ready on http://localhost:3000')
-
-    // Do Twilio stuff
-    const accountSid = 'ACd80aa495ae4744b3ad39429a1ea29a80';
-    const authToken = 'ddf6504dcef3a2d1d4d752222f627c63';
-    const client = require('twilio')(accountSid, authToken);
-
-    client.calls
-      .create({
-        twiml: '<Response><Say>Hey, please stop killing black folks.</Say></Response>',
-        to: '+17605324516',
-        from: '+12055512723'
-      })
-      .then(call => console.log(call.sid));
   })
 })
 .catch((ex) => {
